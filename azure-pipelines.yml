@@ -32,6 +32,11 @@ stages:
   - job: BuildJob
     pool: Default
     steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+      displayName: 'Use Python $(pythonVersion)'
+
     - script: |
         python -m venv antenv
         source antenv/bin/activate
@@ -60,8 +65,7 @@ stages:
   condition: succeeded()
   jobs:
   - deployment: DeploymentJob
-    pool:
-      vmImage: $(vmImageName)
+    pool: Default
     environment: $(environmentName)
     strategy:
       runOnce:
